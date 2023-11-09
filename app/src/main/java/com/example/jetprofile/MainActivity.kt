@@ -7,13 +7,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +52,9 @@ class MainActivity : ComponentActivity() {
 fun MainContent() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier
+            .padding(20.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         // プロフィール画像
         Image(
@@ -80,16 +84,22 @@ fun MainContent() {
         Spacer(modifier = Modifier.height(20.dp))
         CompanySection()
         Spacer(modifier = Modifier.height(20.dp))
+
         // 詳細表示ボタン
+        var isShowDetail by remember {
+            mutableStateOf(false)
+        }
         Button(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF85F6A)),
-            onClick = { /*TODO*/ }) {
+            onClick = { isShowDetail = !isShowDetail }) {
             Text(text = "詳細を表示", color = Color.White)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        //趣味と居住地
-        DetailSection()
-    }
 
+        //趣味と居住地
+        if (isShowDetail) {
+            DetailSection()
+        }
+    }
 }
